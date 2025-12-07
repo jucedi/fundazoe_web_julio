@@ -1,0 +1,25 @@
+/* src/components/InvolucrateSection.module.css */
+
+.involucrateSection {
+  /* Usamos el mismo color de fondo que la sección de programas para consistencia */
+  background-color: var(--color-light-gray);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.involucrateSection h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.involucrateSection p {
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto 2rem auto; /* Centra el párrafo y le da margen inferior */
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem; /* Espacio entre los botones */
+}

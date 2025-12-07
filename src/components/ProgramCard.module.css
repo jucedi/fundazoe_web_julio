@@ -1,0 +1,24 @@
+/* src/components/ProgramCard.module.css */
+.card {
+  background-color: var(--color-white);
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Efecto de levantar la tarjeta */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-teal);
+}
+
+.icon {
+  font-size: 3rem; /* Tamaño grande para el emoji/icono */
+}

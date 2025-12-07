@@ -1,0 +1,51 @@
+/* src/components/Button.module.css */
+
+/* Estilos base que todos los botones comparten */
+.button {
+  padding: 12px 28px;
+  font-family: var(--font-montserrat); /* Usamos la fuente de los títulos */
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  border: 2px solid transparent; /* Borde base transparente */
+}
+
+/* Variante principal: fondo naranja, texto blanco */
+.primary {
+  background-color: var(--color-orange);
+  border-color: var(--color-orange);
+  color: var(--color-white);
+}
+
+.primary:hover {
+  background-color: #e66f00; /* Naranja un poco más oscuro */
+  border-color: #e66f00;
+}
+
+/* Variante secundaria: fondo transparente, borde y texto naranja */
+.secondary {
+  background-color: transparent;
+  border-color: var(--color-orange);
+  color: var(--color-orange);
+}
+
+.secondary:hover {
+  background-color: var(--color-orange);
+  color: var(--color-white);
+}
+
+/* Variante para fondos oscuros: fondo transparente, borde y texto blanco */
+.ghost {
+  background-color: transparent;
+  border-color: var(--color-white);
+  color: var(--color-white);
+}
+
+.ghost:hover {
+  background-color: var(--color-white);
+  color: var(--color-dark-gray);
+}

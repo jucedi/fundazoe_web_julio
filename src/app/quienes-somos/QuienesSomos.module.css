@@ -1,0 +1,22 @@
+/* src/app/quienes-somos/QuienesSomos.module.css */
+.pageContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+.mainImage {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+.pageContainer h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--color-teal);
+}
+.content p {
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}

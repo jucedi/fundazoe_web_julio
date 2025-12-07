@@ -1,0 +1,128 @@
+/* src/components/Header.module.css */
+
+.header {
+  background-color: var(--color-teal);
+  color: var(--color-white);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-family: var(--font-montserrat);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+/* Estilos para la navegación de escritorio */
+.navDesktop ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2.5rem; /* Espacio entre enlaces */
+}
+
+.navDesktop a {
+  color: var(--color-white);
+  text-decoration: none;
+  font-family: var(--font-montserrat);
+  font-weight: 600;
+  font-size: 16px;
+  position: relative;
+  padding-bottom: 0.5rem;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Efecto hover con la línea naranja */
+.navDesktop a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-orange);
+  transform: scaleX(0); /* Inicia escondida */
+  transition: transform 0.2s ease-in-out;
+}
+
+.navDesktop a:hover::after {
+  transform: scaleX(1); /* Se muestra al hacer hover */
+}
+
+/* Botón de hamburguesa */
+.hamburgerButton {
+  display: none; /* Oculto por defecto */
+  background: none;
+  border: none;
+  color: var(--color-white);
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* --- Media Query para Vistas Móviles --- */
+@media (max-width: 768px) {
+  .navDesktop {
+    display: none; /* Oculta el menú de escritorio */
+  }
+
+  .hamburgerButton {
+    display: block; /* Muestra el botón de hamburguesa */
+  }
+}
+/* ... (todos los estilos anteriores) */
+
+/* Estilos para el panel del menú móvil */
+.navMobile {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 80%; /* Ocupa el 80% del ancho */
+  max-width: 400px;
+  height: 100vh;
+  background-color: var(--color-teal);
+  box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+
+  /* Animación de entrada */
+  transform: translateX(100%);
+  animation: slideIn 0.3s forwards;
+}
+
+.navMobile nav {
+  padding-top: 5rem;
+}
+
+.navMobile ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navMobile a {
+  color: var(--color-white);
+  text-decoration: none;
+  font-family: var(--font-montserrat);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Animación para que el panel se deslice */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+/* Añade esto junto a los estilos de .navDesktop a */
+.navDesktop a.active::after {
+  transform: scaleX(1);
+}

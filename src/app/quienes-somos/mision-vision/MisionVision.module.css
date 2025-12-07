@@ -1,0 +1,7 @@
+/* src/app/quienes-somos/mision-vision/MisionVision.module.css */
+.pageContainer { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
+.pageContainer h1 { text-align: center; margin-bottom: 2.5rem; }
+.pageContainer h2 { color: var(--color-teal); border-bottom: 2px solid var(--color-orange); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+.pageContainer article { margin-bottom: 2rem; }
+.pageContainer ul { list-style: none; padding: 0; }
+.pageContainer li { margin-bottom: 1rem; line-height: 1.6; }

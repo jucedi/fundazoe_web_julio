@@ -1,0 +1,8 @@
+/* src/app/programas/orientacion-familiar/Orientacion.module.css */
+.intro { font-size: 1.1rem; line-height: 1.6; }
+.phaseList { list-style: none; padding: 0; }
+.phaseList li { margin-bottom: 1rem; }
+.cta { margin-top: 2rem; padding: 1.5rem; background-color: var(--color-light-gray); text-align: center; border-radius: 8px;}
+.summaryBox h4 { margin-top: 0; color: var(--color-teal); }
+.summaryBox ul { list-style: none; padding: 0; }
+.summaryBox li { margin-bottom: 0.75rem; }

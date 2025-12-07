@@ -1,0 +1,29 @@
+/* src/components/ProgramsSection.module.css */
+.programsSection {
+  padding: 4rem 2rem;
+  background-color: var(--color-light-gray); /* Fondo sutil para diferenciarla */
+}
+
+.programsSection h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+/* El Grid de CSS para las tarjetas */
+.grid {
+  display: grid;
+  /* En escritorio: 3 columnas iguales */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 2rem; /* Espacio entre las tarjetas */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Media Query para pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
+  .grid {
+    /* En móvil: 1 sola columna */
+    grid-template-columns: 1fr;
+  }
+}
