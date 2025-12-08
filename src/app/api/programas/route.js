@@ -1,13 +1,13 @@
+// Archivo: src/app/api/programas/route.js
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebaseAdmin';
 
 export async function GET() {
   try {
-    // Consulta a Firestore (Segura en el servidor)
-    // Asumimos que la colección se llama 'programas'
+    // Consultamos la colección 'programas' ordenados por el campo 'orden'
+    // Nota: Si no tienes campo 'orden', quita .orderBy('orden')
     const snapshot = await db.collection('programas').orderBy('orden').get();
 
-    // Si la colección está vacía, snapshot.docs será un array vacío, no error.
     const programas = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -15,11 +15,9 @@ export async function GET() {
 
     return NextResponse.json(programas);
   } catch (error) {
-    console.error('Error fetching programs:', error);
-    // Si falla (ej. colección no existe), devolvemos array vacío para no romper el front
-    // o un error 500 si prefieres que falle visiblemente.
+    console.error('Error obteniendo programas:', error);
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: 'Error interno del servidor' },
       { status: 500 }
     );
   }
