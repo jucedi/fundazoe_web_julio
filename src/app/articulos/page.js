@@ -1,65 +1,87 @@
-// src/app/articulos/page.js
-import Link from 'next/link';
-import Image from 'next/image';
-import { ARTICULOS_DATA } from '@/data/articulos'; // Importamos los datos locales
+'use client'; // 👈 VITAL: Esto convierte al archivo en un Componente de Cliente
 
-// --- ESTILOS ---
-const TEAL = '#00897B';
-const ORANGE = '#F57C00';
-const DARK = '#333333';
-const LIGHT_BG = '#F8F9FA';
+import { useState, useEffect } from 'react';
+// Asumo que tienes este componente creado según tu lista de archivos.
+// Si no lo tienes, avísame y te paso el código de la tarjeta también.
+import ArticleCard from '@/components/ArticleCard'; 
 
 export default function ArticulosPage() {
-  // Usamos los datos del archivo local
-  const allArticles = ARTICULOS_DATA;
-  const featuredArticle = allArticles[0];
-  const gridArticles = allArticles.slice(1);
+  // 1. Estados: Memoria del componente para guardar los datos, la carga y errores
+  const [articulos, setArticulos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Estilos (Mismos que antes)
-  const container = { maxWidth: '1200px', margin: '0 auto', padding: '40px 24px' };
-  const heroCard = { display: 'flex', flexWrap: 'wrap', backgroundColor: LIGHT_BG, borderRadius: '16px', overflow: 'hidden', marginBottom: '60px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' };
-  const heroImageContainer = { flex: '1 1 500px', height: '400px', position: 'relative' };
-  const heroContent = { flex: '1 1 400px', padding: '60px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' };
-  const gridStyle = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' };
-  const cardStyle = { borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', backgroundColor: '#fff', border: '1px solid #eee' };
+  // 2. Efecto: Se ejecuta una sola vez cuando el usuario entra a la página
+  useEffect(() => {
+    async function fetchArticulos() {
+      try {
+        // Llamamos a la "Ventanilla" (API Route) que conecta con Firebase
+        const response = await fetch('/api/articulos');
+        
+        if (!response.ok) {
+          throw new Error('Error al conectar con el servidor');
+        }
 
-  return (
-    <div style={{ backgroundColor: '#FFF', minHeight: '100vh' }}>
-      <div style={container}>
-        <h1 style={{ textAlign: 'center', fontFamily: 'var(--font-montserrat)', fontSize: '48px', color: TEAL, marginBottom: '60px' }}>Biblioteca de Esperanza</h1>
+        const data = await response.json();
+        setArticulos(data);
+      } catch (err) {
+        console.error("Fallo en la carga:", err);
+        setError('No pudimos cargar los artículos. Intenta de nuevo más tarde.');
+      } finally {
+        // Pase lo que pase (éxito o error), quitamos el reloj de "Cargando"
+        setLoading(false);
+      }
+    }
 
-        {/* DESTACADO */}
-        {featuredArticle && (
-          <div style={heroCard}>
-            <div style={heroImageContainer}>
-              <Image src={featuredArticle.imagen} alt={featuredArticle.titulo} fill style={{objectFit: 'cover'}} />
-            </div>
-            <div style={heroContent}>
-              <span style={{color: ORANGE, fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '10px'}}>Destacado</span>
-              <h2 style={{fontFamily: 'var(--font-montserrat)', fontSize: '32px', color: DARK, marginBottom: '20px'}}>{featuredArticle.titulo}</h2>
-              <Link href={`/articulos/${featuredArticle.id}`} style={{display: 'inline-block', padding: '12px 30px', backgroundColor: ORANGE, color: 'white', borderRadius: '50px', textDecoration: 'none', alignSelf: 'flex-start', fontWeight:'bold'}}>
-                Leer Artículo
-              </Link>
-            </div>
-          </div>
-        )}
+    fetchArticulos();
+  }, []);
 
-        {/* GRID */}
-        <div style={gridStyle}>
-          {gridArticles.map((art) => (
-            <div key={art.id} style={cardStyle}>
-              <div style={{height: '200px', position: 'relative'}}>
-                <Image src={art.imagen} alt={art.titulo} fill style={{objectFit: 'cover'}} />
-              </div>
-              <div style={{padding: '25px'}}>
-                <span style={{color: TEAL, fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase'}}>{art.categoria}</span>
-                <h3 style={{fontFamily: 'var(--font-montserrat)', fontSize: '20px', margin: '10px 0', color: DARK}}>{art.titulo}</h3>
-                <Link href={`/articulos/${art.id}`} style={{color: TEAL, fontWeight: 'bold', textDecoration: 'none'}}>Leer más →</Link>
-              </div>
-            </div>
-          ))}
+  // 3. Renderizado Condicional: Qué mostramos según el estado
+
+  // Escenario A: Cargando...
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent mx-auto mb-4"></div>
+          <p className="text-gray-600 font-medium">Cargando artículos...</p>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+
+  // Escenario B: Hubo un error
+  if (error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center max-w-md">
+          <p className="text-red-500 text-xl mb-4">⚠️</p>
+          <h2 className="text-xl font-bold text-gray-800 mb-2">Ups, algo salió mal</h2>
+          <p className="text-gray-600">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Escenario C: Éxito (Mostramos la grilla de artículos)
+  return (
+    <main className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+            Nuestros Artículos
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Explora noticias, actualizaciones y recursos para conocer más sobre nuestra labor en Fundazoe.
+          </p>
+        </div>
+
+        {articulos.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-lg shadow">
+            <p className="text-gray-500">Aún no hay artículos publicados.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {articulos.map((articulo) => (
+              // Pasamos los datos al componente ArticleCard
+              //
