@@ -4,10 +4,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Ignoramos errores de ESLint (ortografía de código)
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // NOTA: Hemos eliminado la sección 'eslint' porque causaba error.
+  // Lo manejaremos en el package.json.
+
   // Configuración para que Firebase Admin no rompa el cliente
   webpack: (config, { isServer }) => {
     if (!isServer) {
