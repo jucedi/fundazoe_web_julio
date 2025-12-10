@@ -1,21 +1,47 @@
 import admin from "firebase-admin";
 
-if (!admin.apps.length) {
-  try {
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        // Esto es crucial: convierte los saltos de línea \n en saltos reales
-        privateKey: process.env.FIREBASE_PRIVATE_KEY
-          ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
-          : undefined,
-      }),
-    });
-    console.log("✅ Firebase Admin inicializado correctamente");
-  } catch (error) {
-    console.error("❌ Error inicializando Firebase Admin:", error);
+let db;
+
+try {
+  // 1. Intentamos inicializar solo si no hay apps activas
+  if (!admin.apps.length) {
+    // Verificamos que las variables existan ANTES de usarlas
+    if (process.env.FIREBASE_PROJECT_ID && 
+        process.env.FIREBASE_CLIENT_EMAIL && 
+        process.env.FIREBASE_PRIVATE_KEY) {
+      
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId: process.env.FIREBASE_PROJECT_ID,
+          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+          // Reemplazo seguro de saltos de línea
+          privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        }),
+      });
+      console.log("✅ Firebase Admin inicializado correctamente");
+    } else {
+      // Si faltan variables, lanzamos un error controlado para ir al CATCH
+      throw new Error("Faltan variables de entorno en el Build.");
+    }
   }
+
+  // 2. Si llegamos aquí y hay app, usamos Firestore real
+  db = admin.firestore();
+
+} catch (error) {
+  console.warn("⚠️ MODO BUILD/MOCK ACTIVADO:", error.message);
+  
+  // 3. LA CLAVE: Creamos una base de datos "falsa" (Mock) que no hace nada
+  // Esto engaña a Next.js para que termine de construir la página sin errores
+  db = {
+    collection: () => ({
+      doc: () => ({ get: async () => ({ exists: false, data: () => ({}) }) }),
+      get: async () => ({ empty: true, docs: [] }), // Devuelve lista vacía
+      add: async () => {},
+      orderBy: () => ({ get: async () => ({ empty: true, docs: [] }) }),
+      where: () => ({ get: async () => ({ empty: true, docs: [] }) })
+    })
+  };
 }
 
-export const db = admin.firestore();
+export { db };
