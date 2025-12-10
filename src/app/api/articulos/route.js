@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebaseAdmin'; // 👈 Aquí importamos al Portero (Servidor)
 
 // Esta función maneja las peticiones GET (cuando el navegador pide datos)
 export async function GET() {
   try {
+    // Importamos dinámicamente para evitar errores durante el build si faltan variables de entorno
+    const { db } = await import('@/lib/firebaseAdmin');
+
     // 1. Vamos a buscar la colección 'articulos' a la base de datos
     const snapshot = await db.collection('articulos').get();
 
