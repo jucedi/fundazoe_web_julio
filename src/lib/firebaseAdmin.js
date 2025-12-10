@@ -20,7 +20,7 @@ try {
       });
       console.log("✅ Firebase Admin inicializado correctamente");
     } else {
-      // Si faltan variables, lanzamos un error controlado para ir al CATCH
+      // Si faltan variables (común en el build), lanzamos error para activar el Mock
       throw new Error("Faltan variables de entorno en el Build.");
     }
   }
@@ -29,14 +29,14 @@ try {
   db = admin.firestore();
 
 } catch (error) {
-  console.warn("⚠️ MODO BUILD/MOCK ACTIVADO:", error.message);
+  console.warn("⚠️ MODO BUILD/MOCK ACTIVADO (No te preocupes por este aviso):", error.message);
   
-  // 3. LA CLAVE: Creamos una base de datos "falsa" (Mock) que no hace nada
-  // Esto engaña a Next.js para que termine de construir la página sin errores
+  // 3. EL TRUCO MAESTRO: Creamos una base de datos "falsa"
+  // Esto permite que el comando 'npm run build' termine sin romperse
   db = {
     collection: () => ({
       doc: () => ({ get: async () => ({ exists: false, data: () => ({}) }) }),
-      get: async () => ({ empty: true, docs: [] }), // Devuelve lista vacía
+      get: async () => ({ empty: true, docs: [] }),
       add: async () => {},
       orderBy: () => ({ get: async () => ({ empty: true, docs: [] }) }),
       where: () => ({ get: async () => ({ empty: true, docs: [] }) })
