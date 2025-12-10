@@ -1,6 +1,9 @@
+
 import { NextResponse } from "next/server";
 // IMPORTANTE: Importamos 'db' desde nuestro archivo seguro en 'lib'
 import { db } from "@/lib/firebaseAdmin"; 
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
